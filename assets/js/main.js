@@ -33,6 +33,86 @@ if (heroImage) {
   window.addEventListener('resize', requestHeroImageUpdate, { passive: true });
 }
 
+const galleryScrollImages = [...document.querySelectorAll('.collection-gallery .gallery-item img')];
+
+if (galleryScrollImages.length) {
+  let galleryFrameRequested = false;
+  const galleryPositionRange = document.querySelector('.mater-page') ? 38 : 100;
+
+  const updateGalleryImagePositions = () => {
+    const viewportHeight = window.innerHeight;
+
+    galleryScrollImages.forEach((image) => {
+      const frame = image.closest('.gallery-item');
+      const bounds = frame.getBoundingClientRect();
+      const progress = Math.min(1, Math.max(0, (viewportHeight - bounds.top) / (viewportHeight + bounds.height)));
+
+      image.style.setProperty('--gallery-image-position', `${(progress * galleryPositionRange).toFixed(2)}%`);
+    });
+
+    galleryFrameRequested = false;
+  };
+
+  const requestGalleryImageUpdate = () => {
+    if (galleryFrameRequested) return;
+    galleryFrameRequested = true;
+    window.requestAnimationFrame(updateGalleryImagePositions);
+  };
+
+  updateGalleryImagePositions();
+  window.addEventListener('scroll', requestGalleryImageUpdate, { passive: true });
+  window.addEventListener('resize', requestGalleryImageUpdate, { passive: true });
+}
+
+const projectPreviews = document.querySelectorAll('[data-preview-images]');
+
+projectPreviews.forEach((project, projectIndex) => {
+  const previewFrame = project.querySelector('.project-preview');
+  const firstPreview = previewFrame?.querySelector('img');
+  const images = project.dataset.previewImages
+    .split('|')
+    .map((source) => source.trim())
+    .filter(Boolean);
+
+  if (!previewFrame || !firstPreview || images.length < 2) return;
+
+  images.slice(1).forEach((source) => {
+    const preload = new Image();
+    preload.src = source;
+  });
+
+  firstPreview.classList.add('is-visible');
+  const secondPreview = firstPreview.cloneNode();
+  secondPreview.classList.remove('is-visible');
+  secondPreview.alt = '';
+  secondPreview.setAttribute('aria-hidden', 'true');
+  secondPreview.removeAttribute('loading');
+  previewFrame.append(secondPreview);
+
+  let currentImage = 0;
+  let visiblePreview = firstPreview;
+  let hiddenPreview = secondPreview;
+
+  window.setTimeout(() => {
+    window.setInterval(() => {
+      currentImage = (currentImage + 1) % images.length;
+      hiddenPreview.src = images[currentImage];
+
+      const showNextPreview = () => {
+        hiddenPreview.classList.add('is-visible');
+        visiblePreview.classList.remove('is-visible');
+        [visiblePreview, hiddenPreview] = [hiddenPreview, visiblePreview];
+      };
+
+      if (hiddenPreview.complete) {
+        showNextPreview();
+      } else {
+        hiddenPreview.addEventListener('load', showNextPreview, { once: true });
+      }
+    }, 8000);
+  }, projectIndex * 450);
+});
+
 if (menu && nav) {
   menu.addEventListener('click', () => {
     const open = nav.classList.toggle('open');

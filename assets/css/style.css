@@ -6,12 +6,13 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 104px; }
 body { margin: 0; overflow-x: hidden; background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; }
 a { color: inherit; text-decoration: none; }
 img { display: block; width: 100%; object-fit: cover; }
 
-.header { height: 88px; padding: 0 5%; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.header { position: sticky; z-index: 50; top: 0; height: 88px; padding: 0 5%; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); background: var(--bg); transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease; }
+.header.is-scrolled { border-color: rgba(23,23,23,.1); background: rgba(247,245,240,.78); box-shadow: 0 10px 32px rgba(23,23,23,.06); -webkit-backdrop-filter: blur(18px) saturate(1.25); backdrop-filter: blur(18px) saturate(1.25); }
 .logo { display: block; }
 .header-isotype-frame { position: relative; display: block; width: 52px; height: 52px; overflow: hidden; }
 .header-isotype { position: absolute; width: 61px; max-width: none; height: 61px; left: -4px; top: -4px; object-fit: contain; }
@@ -50,9 +51,9 @@ footer { font-size: 11px; letter-spacing: .13em; }
 .hero-bottom { align-items: end; margin-bottom: 35px; }
 .hero-bottom p { max-width: 360px; font-size: 15px; line-height: 1.7; }
 .hero-bottom a,
-.contact > a { font-size: 11px; letter-spacing: .13em; border-bottom: 1px solid var(--ink); padding-bottom: 9px; }
+.contact-link--secondary { font-size: 11px; letter-spacing: .13em; border-bottom: 1px solid var(--ink); padding-bottom: 9px; }
 .hero-image-link { display: block; overflow: hidden; }
-.hero-image { height: clamp(350px, 57vw, 760px); object-position: center 68%; background: #b7ada0; }
+.hero-image { height: clamp(350px, 57vw, 760px); object-position: center var(--hero-image-position, 0%); background: #b7ada0; will-change: object-position; }
 .image-caption { padding-top: 16px; color: var(--muted); }
 
 .projects { padding-top: 125px; }
@@ -73,8 +74,15 @@ footer { font-size: 11px; letter-spacing: .13em; }
 .about h2,
 .contact h2 { font-size: clamp(64px, 9vw, 130px); line-height: .96; margin: 0 0 45px; }
 .about p { font-size: 19px; line-height: 1.8; max-width: 530px; color: #555; }
+.about-copy p { margin: 0; }
+.about-copy p + p { margin-top: 24px; }
 .contact { background: #171717; color: #f7f5f0; min-height: 560px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; }
-.contact > a { border-color: #f7f5f0; }
+.contact-links { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; width: 100%; }
+.contact-link { border-color: #f7f5f0; }
+.contact-link--primary { display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 28px; width: min(760px, 70%); padding: 18px 0; border-top: 1px solid #f7f5f0; border-bottom: 1px solid #f7f5f0; }
+.contact-link--primary > span { font-size: 11px; letter-spacing: .13em; }
+.contact-link--primary strong { font: normal clamp(28px, 4vw, 58px)/1 'Italiana', serif; letter-spacing: -.02em; }
+.contact-link--secondary { white-space: nowrap; }
 footer { padding: 30px 5%; align-items: center; }
 .footer-brand { display: inline-flex; align-items: center; gap: 10px; }
 .footer-brand img { width: 24px; height: 24px; object-fit: contain; }
@@ -149,6 +157,7 @@ footer { padding: 30px 5%; align-items: center; }
 .next-project > a span { font-family: 'DM Sans', sans-serif; font-size: .4em; vertical-align: top; }
 
 @media (max-width: 700px) {
+  html { scroll-padding-top: 86px; }
   .header { height: 72px; }
   .header-isotype-frame { width: 42px; height: 42px; }
   .header-isotype { width: 50px; height: 50px; left: -4px; top: -4px; }
@@ -163,7 +172,7 @@ footer { padding: 30px 5%; align-items: center; }
   .hero h1 { font-size: clamp(44px, 11.8vw, 64px); line-height: .9; margin: 30px 0 34px; }
   .hero-bottom { align-items: start; flex-direction: column; }
   .hero-bottom p { margin: 0; }
-  .hero-image { height: clamp(420px, 125vw, 540px); object-position: center 68%; }
+  .hero-image { height: clamp(420px, 125vw, 540px); object-position: center var(--hero-image-position, 0%); }
   .image-caption span:last-child,
   .hero-top span:last-child { display: none; }
   .section-heading { align-items: start; flex-direction: column; }
@@ -175,6 +184,9 @@ footer { padding: 30px 5%; align-items: center; }
   .about h2,
   .contact h2 { font-size: clamp(60px, 13vw, 90px); }
   .contact { min-height: 490px; }
+  .contact-links { align-items: flex-start; flex-direction: column; gap: 30px; }
+  .contact-link--primary { grid-template-columns: 1fr auto; gap: 12px; width: 100%; }
+  .contact-link--primary > span:first-child { grid-column: 1 / -1; }
   footer { flex-wrap: wrap; line-height: 2; }
   .collection-intro { padding: 42px 20px 54px; }
   .back-link { margin-bottom: 55px; }
@@ -194,7 +206,9 @@ footer { padding: 30px 5%; align-items: center; }
   .process-heading { grid-template-columns: 1fr; gap: 22px; padding: 10px 20px 34px; }
   .process-heading h2 { font-size: 82px; margin-bottom: 22px; }
   .sketch-viewer { grid-template-columns: 1fr; gap: 18px; padding: 0 20px 80px; }
-  .sketch-thumbnails { order: 2; display: grid; grid-template-columns: repeat(3, minmax(135px, 1fr)); overflow-x: auto; padding-bottom: 8px; }
+  .sketch-thumbnails { order: 2; display: flex; flex-direction: row; align-items: flex-start; gap: 14px; width: 100%; height: auto; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding: 2px 2px 12px; }
+  .sketch-thumb { flex: 0 0 190px; width: 190px; height: auto; min-height: 0; align-self: flex-start; scroll-snap-align: start; }
+  .sketch-thumb img { display: block; width: 100%; height: 112px; aspect-ratio: auto; object-fit: contain; }
   .sketch-stage { position: static; }
   .pdf-project { grid-template-columns: 1fr; gap: 50px; padding: 80px 20px 90px; }
   .pdf-project-intro { position: static; }
@@ -221,8 +235,11 @@ footer { padding: 30px 5%; align-items: center; }
   .contact h2 { font-size: clamp(48px, 14vw, 64px); }
   .about p { font-size: 17px; line-height: 1.7; }
   .contact { min-height: 520px; }
+  .contact-link--primary strong { font-size: clamp(27px, 8vw, 38px); }
   footer { align-items: flex-start; flex-direction: column; gap: 8px; padding: 26px 20px; }
   .sketch-toolbar { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .sketch-thumb { flex-basis: 155px; width: 155px; }
+  .sketch-thumb img { height: 91px; }
   .pdf-toolbar > div { align-items: flex-start; flex-direction: column; gap: 12px; }
   .pdf-embed { height: 68vh; min-height: 460px; }
   .pdf-fallback { min-height: 430px; padding: 18px; }

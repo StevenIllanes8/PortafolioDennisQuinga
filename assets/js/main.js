@@ -1,5 +1,37 @@
 const menu = document.querySelector('.menu');
 const nav = document.querySelector('#nav');
+const header = document.querySelector('.header');
+
+if (header) {
+  const updateHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 16);
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
+}
+
+const heroImage = document.querySelector('.hero-image');
+
+if (heroImage) {
+  let heroFrameRequested = false;
+
+  const updateHeroImagePosition = () => {
+    const headerHeight = header?.offsetHeight || 0;
+    const finalScrollPoint = Math.max(1, heroImage.offsetTop + heroImage.offsetHeight - headerHeight);
+    const progress = Math.min(1, Math.max(0, window.scrollY / finalScrollPoint));
+
+    heroImage.style.setProperty('--hero-image-position', `${(progress * 100).toFixed(2)}%`);
+    heroFrameRequested = false;
+  };
+
+  const requestHeroImageUpdate = () => {
+    if (heroFrameRequested) return;
+    heroFrameRequested = true;
+    window.requestAnimationFrame(updateHeroImagePosition);
+  };
+
+  updateHeroImagePosition();
+  window.addEventListener('scroll', requestHeroImageUpdate, { passive: true });
+  window.addEventListener('resize', requestHeroImageUpdate, { passive: true });
+}
 
 if (menu && nav) {
   menu.addEventListener('click', () => {

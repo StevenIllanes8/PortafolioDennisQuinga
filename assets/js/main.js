@@ -2,16 +2,29 @@ const menu = document.querySelector('.menu');
 const nav = document.querySelector('#nav');
 const header = document.querySelector('.header');
 
+const bindViewportUpdates = (callback) => {
+  window.addEventListener('scroll', callback, { passive: true });
+  window.addEventListener('resize', callback, { passive: true });
+  window.addEventListener('orientationchange', callback, { passive: true });
+  window.addEventListener('pageshow', callback);
+  document.addEventListener('touchmove', callback, { passive: true });
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', callback, { passive: true });
+    window.visualViewport.addEventListener('scroll', callback, { passive: true });
+  }
+};
+
 if (header) {
   const updateHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 16);
   updateHeader();
-  window.addEventListener('scroll', updateHeader, { passive: true });
+  bindViewportUpdates(updateHeader);
 }
 
 const animatedHero = document.querySelector('.has-hero-intro .hero');
-const heroLogoFrame = animatedHero?.querySelector('.hero-logo-frame');
-const heroIntroStage = animatedHero?.querySelector('.hero-intro-stage');
-const heroIntroSticky = animatedHero?.querySelector('.hero-intro-sticky');
+const heroLogoFrame = animatedHero ? animatedHero.querySelector('.hero-logo-frame') : null;
+const heroIntroStage = animatedHero ? animatedHero.querySelector('.hero-intro-stage') : null;
+const heroIntroSticky = animatedHero ? animatedHero.querySelector('.hero-intro-sticky') : null;
 
 if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
   let heroIntroFrameRequested = false;
@@ -19,8 +32,8 @@ if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
   const updateHeroIntro = () => {
     const isMobile = window.innerWidth <= 700;
     const initialScale = isMobile ? 1.08 : 1.14;
-    const viewportHeight = window.visualViewport?.height || window.innerHeight;
-    const headerHeight = header?.offsetHeight || 0;
+    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    const headerHeight = header ? header.offsetHeight : 0;
     let logoDocumentTop = 0;
     let logoOffsetElement = heroLogoFrame;
     let stageDocumentTop = 0;
@@ -67,8 +80,7 @@ if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
   };
 
   updateHeroIntro();
-  window.addEventListener('scroll', requestHeroIntroUpdate, { passive: true });
-  window.addEventListener('resize', requestHeroIntroUpdate, { passive: true });
+  bindViewportUpdates(requestHeroIntroUpdate);
 }
 
 const heroImage = document.querySelector('.hero-image');
@@ -93,8 +105,7 @@ if (heroImage) {
   };
 
   updateHeroImagePosition();
-  window.addEventListener('scroll', requestHeroImageUpdate, { passive: true });
-  window.addEventListener('resize', requestHeroImageUpdate, { passive: true });
+  bindViewportUpdates(requestHeroImageUpdate);
 }
 
 const galleryScrollImages = [...document.querySelectorAll('.collection-gallery .gallery-item img')];
@@ -124,15 +135,14 @@ if (galleryScrollImages.length) {
   };
 
   updateGalleryImagePositions();
-  window.addEventListener('scroll', requestGalleryImageUpdate, { passive: true });
-  window.addEventListener('resize', requestGalleryImageUpdate, { passive: true });
+  bindViewportUpdates(requestGalleryImageUpdate);
 }
 
 const projectPreviews = document.querySelectorAll('[data-preview-images]');
 
 projectPreviews.forEach((project, projectIndex) => {
   const previewFrame = project.querySelector('.project-preview');
-  const firstPreview = previewFrame?.querySelector('img');
+  const firstPreview = previewFrame ? previewFrame.querySelector('img') : null;
   const images = project.dataset.previewImages
     .split('|')
     .map((source) => source.trim())

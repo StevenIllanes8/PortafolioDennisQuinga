@@ -21,12 +21,6 @@ window.addEventListener('scroll', requestViewportUpdates, { passive: true });
 window.addEventListener('resize', requestViewportUpdates, { passive: true });
 window.addEventListener('orientationchange', requestViewportUpdates, { passive: true });
 window.addEventListener('pageshow', requestViewportUpdates);
-document.addEventListener('touchmove', requestViewportUpdates, { passive: true });
-
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', requestViewportUpdates, { passive: true });
-  window.visualViewport.addEventListener('scroll', requestViewportUpdates, { passive: true });
-}
 
 if (header) {
   const updateHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 16);
@@ -110,11 +104,13 @@ if (heroImage) {
     const viewportHeight = window.innerHeight;
     const progress = Math.min(1, Math.max(0, (viewportHeight - bounds.top) / (viewportHeight + bounds.height)));
 
-    const position = progress * 100;
+    const isMobile = window.innerWidth <= 700;
+    const position = isMobile ? ((progress - .5) * 6) : (progress * 100);
     const previousPosition = Number(heroImage.dataset.scrollPosition || -1);
 
     if (Math.abs(position - previousPosition) > .15) {
-      heroImage.style.setProperty('--hero-image-position', `${position.toFixed(2)}%`);
+      const property = isMobile ? '--hero-image-shift' : '--hero-image-position';
+      heroImage.style.setProperty(property, `${position.toFixed(2)}%`);
       heroImage.dataset.scrollPosition = position.toFixed(2);
     }
   };
@@ -127,20 +123,43 @@ const galleryScrollImages = [...document.querySelectorAll('.collection-gallery .
 
 if (galleryScrollImages.length) {
   const galleryPositionRange = document.querySelector('.mater-page') ? 38 : 100;
+  const activeGalleryImages = new Set();
+
+  if ('IntersectionObserver' in window) {
+    const galleryObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const image = entry.target.querySelector('img');
+        if (!image) return;
+
+        if (entry.isIntersecting) activeGalleryImages.add(image);
+        else activeGalleryImages.delete(image);
+
+        entry.target.classList.toggle('is-scroll-active', entry.isIntersecting);
+      });
+
+      requestViewportUpdates();
+    }, { rootMargin: '35% 0px' });
+
+    galleryScrollImages.forEach((image) => galleryObserver.observe(image.closest('.gallery-item')));
+  } else {
+    galleryScrollImages.forEach((image) => activeGalleryImages.add(image));
+  }
 
   const updateGalleryImagePositions = () => {
     const viewportHeight = window.innerHeight;
 
-    galleryScrollImages.forEach((image) => {
+    activeGalleryImages.forEach((image) => {
       const frame = image.closest('.gallery-item');
       const bounds = frame.getBoundingClientRect();
       const progress = Math.min(1, Math.max(0, (viewportHeight - bounds.top) / (viewportHeight + bounds.height)));
 
-      const position = progress * galleryPositionRange;
+      const isMobile = window.innerWidth <= 700;
+      const position = isMobile ? ((progress - .5) * 6) : (progress * galleryPositionRange);
       const previousPosition = Number(image.dataset.scrollPosition || -1);
 
       if (Math.abs(position - previousPosition) > .15) {
-        image.style.setProperty('--gallery-image-position', `${position.toFixed(2)}%`);
+        const property = isMobile ? '--gallery-image-shift' : '--gallery-image-position';
+        image.style.setProperty(property, `${position.toFixed(2)}%`);
         image.dataset.scrollPosition = position.toFixed(2);
       }
     });

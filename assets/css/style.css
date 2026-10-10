@@ -206,7 +206,8 @@ footer { padding: 30px 5%; align-items: center; }
   .hero-bottom { align-items: start; flex-direction: column; }
   .hero-bottom p { margin: 0; }
   .has-hero-intro .hero-image-link { margin-top: -410px; }
-  .hero-image { height: clamp(420px, 125vw, 540px); object-position: center var(--hero-image-position, 0%); }
+  .hero-image-link { position: relative; height: clamp(420px, 125vw, 540px); }
+  .hero-image { position: absolute; top: -5%; left: 0; height: 110%; object-position: center 20%; transform: translate3d(0, var(--hero-image-shift, -3%), 0); will-change: transform; }
   .image-caption span:last-child,
   .hero-top span:last-child { display: none; }
   .section-heading { align-items: start; flex-direction: column; }
@@ -232,9 +233,13 @@ footer { padding: 30px 5%; align-items: center; }
   .collection-detail-note h2 { font-size: clamp(38px, 11vw, 54px); }
   .collection-detail-note p { font-size: 16px; }
   .collection-gallery { grid-template-columns: 1fr; gap: 18px; padding: 0 20px 80px; }
-  .gallery-item--wide { grid-column: auto; }
+  .gallery-item,
+  .gallery-item--wide { grid-column: auto; height: auto; aspect-ratio: 3 / 4; }
   .gallery-item img,
-  .gallery-item--wide img { height: auto; aspect-ratio: 3 / 4; object-position: center var(--gallery-image-position, 0%); }
+  .gallery-item--wide img { position: absolute; top: -5%; left: 0; width: 100%; height: 110%; aspect-ratio: auto; object-position: center 18%; transform: translate3d(0, var(--gallery-image-shift, -3%), 0); transition: filter .35s ease; will-change: auto; }
+  .gallery-item.is-scroll-active img { will-change: transform; }
+  .gallery-item:hover img { transform: translate3d(0, var(--gallery-image-shift, -3%), 0); }
+  .mater-page .gallery-item img { object-position: center 10%; }
   .lightbox { padding: 18px; }
   .lightbox[open] { grid-template-columns: 44px minmax(0, 1fr) 44px; }
   .lightbox figure { height: calc(100dvh - 36px); }
@@ -294,4 +299,6 @@ footer { padding: 30px 5%; align-items: center; }
   .has-hero-intro .hero-image-link { visibility: visible !important; margin-top: 0; opacity: 1 !important; transform: none !important; }
   .has-hero-intro .hero h1,
   .has-hero-intro .hero-bottom { visibility: visible !important; opacity: 1 !important; transform: none !important; }
+  .hero-image,
+  .gallery-item img { transform: none !important; will-change: auto; }
 }

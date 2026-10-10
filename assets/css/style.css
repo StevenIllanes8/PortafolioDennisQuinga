@@ -189,7 +189,7 @@ footer { padding: 30px 5%; align-items: center; }
   .hero-intro-sticky { top: 72px; height: calc(100vh - 72px); height: calc(100svh - 72px); }
   .header-isotype-frame { width: 42px; height: 42px; }
   .header-isotype { width: 50px; height: 50px; left: -4px; top: -4px; }
-  .menu { display: block; border: 0; background: none; font: 11px 'DM Sans', sans-serif; letter-spacing: .12em; }
+  .menu { display: block; appearance: none; -webkit-appearance: none; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--ink); font: 11px 'DM Sans', sans-serif; letter-spacing: .12em; -webkit-text-fill-color: currentColor; }
   .header nav { display: none; position: absolute; top: 72px; left: 0; right: 0; background: var(--bg); z-index: 3; padding: 30px 5%; flex-direction: column; border-bottom: 1px solid var(--line); }
   .header nav.open { display: flex; }
   .hero,

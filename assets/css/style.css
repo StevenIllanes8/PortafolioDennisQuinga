@@ -61,7 +61,7 @@ footer { font-size: 11px; letter-spacing: .13em; }
 .hero-bottom p { max-width: 360px; font-size: 15px; line-height: 1.7; }
 .hero-bottom a,
 .contact-link--secondary { font-size: 11px; letter-spacing: .13em; border-bottom: 1px solid var(--ink); padding-bottom: 9px; }
-.hero-image-link { display: block; overflow: hidden; }
+.hero-image-link { display: block; overflow: hidden; contain: paint; }
 .has-hero-intro .hero-image-link { visibility: hidden; margin-top: clamp(-430px, -40vh, -360px); opacity: var(--hero-image-reveal, 0); transform: translate3d(0, var(--hero-image-reveal-shift, 34px), 0); will-change: opacity, transform; }
 .has-hero-intro .hero.is-image-visible .hero-image-link { visibility: visible; }
 .hero-image { height: clamp(350px, 57vw, 760px); object-position: center var(--hero-image-position, 0%); background: #b7ada0; will-change: object-position; }
@@ -128,7 +128,7 @@ footer { padding: 30px 5%; align-items: center; }
 .collection-detail-note p { max-width: 650px; margin: 0; color: #555; font-size: 17px; line-height: 1.75; }
 
 .collection-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 0 5% 120px; }
-.gallery-item { appearance: none; display: block; padding: 0; overflow: hidden; border: 0; background: transparent; cursor: zoom-in; }
+.gallery-item { appearance: none; display: block; padding: 0; overflow: hidden; contain: paint; border: 0; background: transparent; cursor: zoom-in; }
 .gallery-item img { height: clamp(420px, 58vw, 830px); object-position: center var(--gallery-image-position, 0%); transition: transform .5s ease, filter .35s; will-change: object-position; }
 .gallery-item:hover img { transform: scale(1.012); filter: saturate(1.06); }
 .gallery-item--wide { grid-column: 1 / -1; }
@@ -185,6 +185,7 @@ footer { padding: 30px 5%; align-items: center; }
 @media (max-width: 700px) {
   html { scroll-padding-top: 86px; }
   .header { height: 72px; }
+  .header.is-scrolled { background: rgba(247,245,240,.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .hero-intro-stage { height: 138vh; height: 138svh; }
   .hero-intro-sticky { top: 72px; height: calc(100vh - 72px); height: calc(100svh - 72px); }
   .header-isotype-frame { width: 42px; height: 42px; }

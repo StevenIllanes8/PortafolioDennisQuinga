@@ -2,18 +2,31 @@ const menu = document.querySelector('.menu');
 const nav = document.querySelector('#nav');
 const header = document.querySelector('.header');
 
-const bindViewportUpdates = (callback) => {
-  window.addEventListener('scroll', callback, { passive: true });
-  window.addEventListener('resize', callback, { passive: true });
-  window.addEventListener('orientationchange', callback, { passive: true });
-  window.addEventListener('pageshow', callback);
-  document.addEventListener('touchmove', callback, { passive: true });
+const viewportUpdateCallbacks = [];
+let viewportFrameRequested = false;
 
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', callback, { passive: true });
-    window.visualViewport.addEventListener('scroll', callback, { passive: true });
-  }
+const requestViewportUpdates = () => {
+  if (viewportFrameRequested) return;
+  viewportFrameRequested = true;
+
+  window.requestAnimationFrame(() => {
+    viewportFrameRequested = false;
+    viewportUpdateCallbacks.forEach((callback) => callback());
+  });
 };
+
+const bindViewportUpdates = (callback) => viewportUpdateCallbacks.push(callback);
+
+window.addEventListener('scroll', requestViewportUpdates, { passive: true });
+window.addEventListener('resize', requestViewportUpdates, { passive: true });
+window.addEventListener('orientationchange', requestViewportUpdates, { passive: true });
+window.addEventListener('pageshow', requestViewportUpdates);
+document.addEventListener('touchmove', requestViewportUpdates, { passive: true });
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', requestViewportUpdates, { passive: true });
+  window.visualViewport.addEventListener('scroll', requestViewportUpdates, { passive: true });
+}
 
 if (header) {
   const updateHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 16);
@@ -27,13 +40,14 @@ const heroIntroStage = animatedHero ? animatedHero.querySelector('.hero-intro-st
 const heroIntroSticky = animatedHero ? animatedHero.querySelector('.hero-intro-sticky') : null;
 
 if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
-  let heroIntroFrameRequested = false;
+  let heroIntroMetrics = null;
+  let heroIntroLayoutWidth = 0;
 
-  const updateHeroIntro = () => {
+  const measureHeroIntro = () => {
     const isMobile = window.innerWidth <= 700;
     const initialScale = isMobile ? 1.08 : 1.14;
-    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
     const headerHeight = header ? header.offsetHeight : 0;
+    const viewportHeight = heroIntroSticky.offsetHeight + headerHeight;
     let logoDocumentTop = 0;
     let logoOffsetElement = heroLogoFrame;
     let stageDocumentTop = 0;
@@ -54,6 +68,17 @@ if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
     const initialTranslate = Math.max(0, viewportCenter - logoCenter);
     const stickyReleasePoint = stageDocumentTop + heroIntroStage.offsetHeight - heroIntroSticky.offsetHeight - headerHeight;
     const scrollRange = Math.max(isMobile ? 320 : 380, stickyReleasePoint);
+
+    heroIntroMetrics = { isMobile, initialScale, initialTranslate, scrollRange };
+    heroIntroLayoutWidth = window.innerWidth;
+  };
+
+  const updateHeroIntro = () => {
+    if (!heroIntroMetrics || Math.abs(window.innerWidth - heroIntroLayoutWidth) > 1) {
+      measureHeroIntro();
+    }
+
+    const { isMobile, initialScale, initialTranslate, scrollRange } = heroIntroMetrics;
     const progress = Math.min(1, Math.max(0, window.scrollY / scrollRange));
     const easedProgress = progress * progress * (3 - (2 * progress));
     const copyProgress = Math.min(1, Math.max(0, (progress - .24) / .46));
@@ -70,48 +95,37 @@ if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
     animatedHero.classList.toggle('is-copy-visible', copyProgress > .025);
     animatedHero.classList.toggle('is-image-visible', imageRevealProgress > .01);
     animatedHero.classList.add('is-intro-ready');
-    heroIntroFrameRequested = false;
-  };
-
-  const requestHeroIntroUpdate = () => {
-    if (heroIntroFrameRequested) return;
-    heroIntroFrameRequested = true;
-    window.requestAnimationFrame(updateHeroIntro);
   };
 
   updateHeroIntro();
-  bindViewportUpdates(requestHeroIntroUpdate);
+  bindViewportUpdates(updateHeroIntro);
 }
 
 const heroImage = document.querySelector('.hero-image');
 
 if (heroImage) {
-  let heroFrameRequested = false;
-
   const updateHeroImagePosition = () => {
     const frame = heroImage.closest('.hero-image-link');
     const bounds = frame.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
     const progress = Math.min(1, Math.max(0, (viewportHeight - bounds.top) / (viewportHeight + bounds.height)));
 
-    heroImage.style.setProperty('--hero-image-position', `${(progress * 100).toFixed(2)}%`);
-    heroFrameRequested = false;
-  };
+    const position = progress * 100;
+    const previousPosition = Number(heroImage.dataset.scrollPosition || -1);
 
-  const requestHeroImageUpdate = () => {
-    if (heroFrameRequested) return;
-    heroFrameRequested = true;
-    window.requestAnimationFrame(updateHeroImagePosition);
+    if (Math.abs(position - previousPosition) > .15) {
+      heroImage.style.setProperty('--hero-image-position', `${position.toFixed(2)}%`);
+      heroImage.dataset.scrollPosition = position.toFixed(2);
+    }
   };
 
   updateHeroImagePosition();
-  bindViewportUpdates(requestHeroImageUpdate);
+  bindViewportUpdates(updateHeroImagePosition);
 }
 
 const galleryScrollImages = [...document.querySelectorAll('.collection-gallery .gallery-item img')];
 
 if (galleryScrollImages.length) {
-  let galleryFrameRequested = false;
   const galleryPositionRange = document.querySelector('.mater-page') ? 38 : 100;
 
   const updateGalleryImagePositions = () => {
@@ -122,20 +136,18 @@ if (galleryScrollImages.length) {
       const bounds = frame.getBoundingClientRect();
       const progress = Math.min(1, Math.max(0, (viewportHeight - bounds.top) / (viewportHeight + bounds.height)));
 
-      image.style.setProperty('--gallery-image-position', `${(progress * galleryPositionRange).toFixed(2)}%`);
+      const position = progress * galleryPositionRange;
+      const previousPosition = Number(image.dataset.scrollPosition || -1);
+
+      if (Math.abs(position - previousPosition) > .15) {
+        image.style.setProperty('--gallery-image-position', `${position.toFixed(2)}%`);
+        image.dataset.scrollPosition = position.toFixed(2);
+      }
     });
-
-    galleryFrameRequested = false;
-  };
-
-  const requestGalleryImageUpdate = () => {
-    if (galleryFrameRequested) return;
-    galleryFrameRequested = true;
-    window.requestAnimationFrame(updateGalleryImagePositions);
   };
 
   updateGalleryImagePositions();
-  bindViewportUpdates(requestGalleryImageUpdate);
+  bindViewportUpdates(updateGalleryImagePositions);
 }
 
 const projectPreviews = document.querySelectorAll('[data-preview-images]');

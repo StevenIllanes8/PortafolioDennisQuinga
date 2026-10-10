@@ -11,3 +11,10 @@ Sitio estático responsive listo para GitHub Pages.
 
 ## Publicar
 Sube el contenido del proyecto a un repositorio público. En Settings → Pages selecciona Deploy from a branch → main → /(root) → Save.
+
+## SEO e indexación
+- El dominio canónico es `https://dennisisabeldesigner.com/` y se conserva mediante `CNAME`.
+- `robots.txt` permite el rastreo y declara `https://dennisisabeldesigner.com/sitemap.xml`.
+- Después de publicar, verifica el dominio en Google Search Console y envía `sitemap.xml` desde el informe **Sitemaps**.
+- Usa **Inspección de URLs** en Search Console para solicitar la indexación inicial de la portada y de las páginas de cada colección.
+- Mantén las URLs canónicas y el sitemap sincronizados cuando agregues nuevas colecciones.

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dennisisabeldesigner.com/sitemap.xml

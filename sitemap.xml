@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://dennisisabeldesigner.com/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-01-1920.webp</image:loc>
+      <image:caption>Colección ILA de Dennis Isabel Designer</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/colecciones/Mater%20Dolorosa/assad.jpeg</image:loc>
+      <image:caption>Colección Mater Dolorosa de Dennis Isabel Designer</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://dennisisabeldesigner.com/bocetos.html</loc>
+    <lastmod>2026-10-10</lastmod>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/bocetos/mater-dolorosa-portada.png</image:loc>
+      <image:caption>Bocetos y proceso creativo de Mater Dolorosa</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://dennisisabeldesigner.com/colecciones/ila.html</loc>
+    <lastmod>2026-10-10</lastmod>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-01-1920.webp</image:loc>
+      <image:caption>Modelos de la colección ILA en un paisaje andino</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-02-1920.webp</image:loc>
+      <image:caption>Prendas rojas y azules de la colección ILA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-03-1920.webp</image:loc>
+      <image:caption>Diseño con falda roja de la colección ILA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-04-1920.webp</image:loc>
+      <image:caption>Conjunto de denim azul de la colección ILA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-05-1920.webp</image:loc>
+      <image:caption>Moda de autor de Dennis Isabel en el paisaje de Ecuador</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-06-1920.webp</image:loc>
+      <image:caption>Retrato editorial de la colección ILA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-07-1920.webp</image:loc>
+      <image:caption>Detalle artesanal de la colección ILA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-08-1920.webp</image:loc>
+      <image:caption>Sombrero de denim de la colección ILA</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://dennisisabeldesigner.com/colecciones/mater-dolorosa.html</loc>
+    <lastmod>2026-10-10</lastmod>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/colecciones/Mater%20Dolorosa/assad.jpeg</image:loc>
+      <image:caption>Diseño negro y rojo de la colección Mater Dolorosa</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/colecciones/Mater%20Dolorosa/WhatsApp%20Image%202026-10-09%20at%2017.19.08.jpeg</image:loc>
+      <image:caption>Diseño rojo con bordado y pedrería de Mater Dolorosa</image:caption>
+    </image:image>
+  </url>
+</urlset>

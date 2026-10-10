@@ -32,8 +32,9 @@ const animatedHero = document.querySelector('.has-hero-intro .hero');
 const heroLogoFrame = animatedHero ? animatedHero.querySelector('.hero-logo-frame') : null;
 const heroIntroStage = animatedHero ? animatedHero.querySelector('.hero-intro-stage') : null;
 const heroIntroSticky = animatedHero ? animatedHero.querySelector('.hero-intro-sticky') : null;
+const heroBottom = animatedHero ? animatedHero.querySelector('.hero-bottom') : null;
 
-if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
+if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky && heroBottom) {
   let heroIntroMetrics = null;
   let heroIntroLayoutWidth = 0;
 
@@ -62,6 +63,12 @@ if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
     const initialTranslate = Math.max(0, viewportCenter - logoCenter);
     const stickyReleasePoint = stageDocumentTop + heroIntroStage.offsetHeight - heroIntroSticky.offsetHeight - headerHeight;
     const scrollRange = Math.max(isMobile ? 320 : 380, stickyReleasePoint);
+    const requestedPullUp = isMobile ? 410 : Math.min(430, Math.max(360, window.innerHeight * .4));
+    const copyBottom = heroBottom.offsetTop + heroBottom.offsetHeight;
+    const minimumGap = isMobile ? 24 : 32;
+    const safeImageMargin = Math.max(-requestedPullUp, copyBottom + minimumGap - heroIntroSticky.offsetHeight);
+
+    animatedHero.style.setProperty('--hero-image-margin', `${safeImageMargin.toFixed(2)}px`);
 
     heroIntroMetrics = { isMobile, initialScale, initialTranslate, scrollRange };
     heroIntroLayoutWidth = window.innerWidth;

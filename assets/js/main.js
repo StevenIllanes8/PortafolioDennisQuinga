@@ -8,15 +8,79 @@ if (header) {
   window.addEventListener('scroll', updateHeader, { passive: true });
 }
 
+const animatedHero = document.querySelector('.has-hero-intro .hero');
+const heroLogoFrame = animatedHero?.querySelector('.hero-logo-frame');
+const heroIntroStage = animatedHero?.querySelector('.hero-intro-stage');
+const heroIntroSticky = animatedHero?.querySelector('.hero-intro-sticky');
+
+if (animatedHero && heroLogoFrame && heroIntroStage && heroIntroSticky) {
+  let heroIntroFrameRequested = false;
+
+  const updateHeroIntro = () => {
+    const isMobile = window.innerWidth <= 700;
+    const initialScale = isMobile ? 1.08 : 1.14;
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const headerHeight = header?.offsetHeight || 0;
+    let logoDocumentTop = 0;
+    let logoOffsetElement = heroLogoFrame;
+    let stageDocumentTop = 0;
+    let stageOffsetElement = heroIntroStage;
+
+    while (logoOffsetElement) {
+      logoDocumentTop += logoOffsetElement.offsetTop;
+      logoOffsetElement = logoOffsetElement.offsetParent;
+    }
+
+    while (stageOffsetElement) {
+      stageDocumentTop += stageOffsetElement.offsetTop;
+      stageOffsetElement = stageOffsetElement.offsetParent;
+    }
+
+    const viewportCenter = headerHeight + ((viewportHeight - headerHeight) / 2);
+    const logoCenter = logoDocumentTop + ((heroLogoFrame.offsetHeight * initialScale) / 2);
+    const initialTranslate = Math.max(0, viewportCenter - logoCenter);
+    const stickyReleasePoint = stageDocumentTop + heroIntroStage.offsetHeight - heroIntroSticky.offsetHeight - headerHeight;
+    const scrollRange = Math.max(isMobile ? 320 : 380, stickyReleasePoint);
+    const progress = Math.min(1, Math.max(0, window.scrollY / scrollRange));
+    const easedProgress = progress * progress * (3 - (2 * progress));
+    const copyProgress = Math.min(1, Math.max(0, (progress - .24) / .46));
+    const easedCopyProgress = copyProgress * copyProgress * (3 - (2 * copyProgress));
+    const imageRevealProgress = Math.min(1, Math.max(0, (progress - .70) / .22));
+    const easedImageRevealProgress = imageRevealProgress * imageRevealProgress * (3 - (2 * imageRevealProgress));
+
+    animatedHero.style.setProperty('--hero-logo-scale', (initialScale - ((initialScale - 1) * easedProgress)).toFixed(4));
+    animatedHero.style.setProperty('--hero-logo-translate', `${(initialTranslate * (1 - easedProgress)).toFixed(2)}px`);
+    animatedHero.style.setProperty('--hero-copy-opacity', easedCopyProgress.toFixed(4));
+    animatedHero.style.setProperty('--hero-copy-shift', `${((1 - easedCopyProgress) * (isMobile ? 24 : 38)).toFixed(2)}px`);
+    animatedHero.style.setProperty('--hero-image-reveal', easedImageRevealProgress.toFixed(4));
+    animatedHero.style.setProperty('--hero-image-reveal-shift', `${((1 - easedImageRevealProgress) * (isMobile ? 22 : 34)).toFixed(2)}px`);
+    animatedHero.classList.toggle('is-copy-visible', copyProgress > .025);
+    animatedHero.classList.toggle('is-image-visible', imageRevealProgress > .01);
+    animatedHero.classList.add('is-intro-ready');
+    heroIntroFrameRequested = false;
+  };
+
+  const requestHeroIntroUpdate = () => {
+    if (heroIntroFrameRequested) return;
+    heroIntroFrameRequested = true;
+    window.requestAnimationFrame(updateHeroIntro);
+  };
+
+  updateHeroIntro();
+  window.addEventListener('scroll', requestHeroIntroUpdate, { passive: true });
+  window.addEventListener('resize', requestHeroIntroUpdate, { passive: true });
+}
+
 const heroImage = document.querySelector('.hero-image');
 
 if (heroImage) {
   let heroFrameRequested = false;
 
   const updateHeroImagePosition = () => {
-    const headerHeight = header?.offsetHeight || 0;
-    const finalScrollPoint = Math.max(1, heroImage.offsetTop + heroImage.offsetHeight - headerHeight);
-    const progress = Math.min(1, Math.max(0, window.scrollY / finalScrollPoint));
+    const frame = heroImage.closest('.hero-image-link');
+    const bounds = frame.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const progress = Math.min(1, Math.max(0, (viewportHeight - bounds.top) / (viewportHeight + bounds.height)));
 
     heroImage.style.setProperty('--hero-image-position', `${(progress * 100).toFixed(2)}%`);
     heroFrameRequested = false;

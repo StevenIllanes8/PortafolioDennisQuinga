@@ -279,12 +279,14 @@ if (lightbox && galleryItems.length) {
   });
 }
 
-const sketchButtons = [...document.querySelectorAll('[data-sketch-src]')];
-const sketchMain = document.querySelector('#sketch-main');
-const sketchCounter = document.querySelector('#sketch-counter');
-const sketchOpen = document.querySelector('#sketch-open');
+document.querySelectorAll('[data-sketch-viewer]').forEach((viewer) => {
+  const sketchButtons = [...viewer.querySelectorAll('[data-sketch-src]')];
+  const sketchMain = viewer.querySelector('[data-sketch-main]');
+  const sketchCounter = viewer.querySelector('[data-sketch-counter]');
+  const sketchOpen = viewer.querySelector('[data-sketch-open]');
 
-if (sketchButtons.length && sketchMain && sketchCounter && sketchOpen) {
+  if (!sketchButtons.length || !sketchMain || !sketchCounter || !sketchOpen) return;
+
   sketchButtons.forEach((button, index) => {
     button.addEventListener('click', () => {
       sketchButtons.forEach((item) => {
@@ -299,4 +301,4 @@ if (sketchButtons.length && sketchMain && sketchCounter && sketchOpen) {
       sketchCounter.textContent = `LÁMINA ${String(index + 1).padStart(2, '0')} / ${String(sketchButtons.length).padStart(2, '0')}`;
     });
   });
-}
+});

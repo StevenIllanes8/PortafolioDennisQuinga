@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://dennisisabeldesigner.com/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-01-1920.webp</image:loc>
       <image:caption>Colección ILA de Dennis Isabel Designer</image:caption>
@@ -15,15 +15,19 @@
   </url>
   <url>
     <loc>https://dennisisabeldesigner.com/bocetos.html</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
-      <image:loc>https://dennisisabeldesigner.com/assets/bocetos/mater-dolorosa-portada.png</image:loc>
+      <image:loc>https://dennisisabeldesigner.com/assets/bocetos/ILA/Sin%20t%C3%ADtulo-1_Mesa%20de%20trabajo%201.png</image:loc>
+      <image:caption>Bocetos y proceso creativo de la colección ILA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dennisisabeldesigner.com/assets/bocetos/MATTER%20DOLOROSA/mater-dolorosa-portada.png</image:loc>
       <image:caption>Bocetos y proceso creativo de Mater Dolorosa</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://dennisisabeldesigner.com/colecciones/ila.html</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://dennisisabeldesigner.com/assets/optimized/ila/ila-01-1920.webp</image:loc>
       <image:caption>Modelos de la colección ILA en un paisaje andino</image:caption>
@@ -59,7 +63,7 @@
   </url>
   <url>
     <loc>https://dennisisabeldesigner.com/colecciones/mater-dolorosa.html</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <image:image>
       <image:loc>https://dennisisabeldesigner.com/assets/colecciones/Mater%20Dolorosa/assad.jpeg</image:loc>
       <image:caption>Diseño negro y rojo de la colección Mater Dolorosa</image:caption>

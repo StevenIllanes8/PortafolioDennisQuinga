@@ -149,18 +149,21 @@ footer { padding: 30px 5%; align-items: center; }
 .process-heading { display: grid; grid-template-columns: .28fr .72fr; gap: 28px; padding: 20px 5% 42px; }
 .process-heading > span { font-size: 11px; letter-spacing: .13em; }
 .process-heading h2 { font: normal clamp(72px, 10vw, 150px)/.8 'Italiana', serif; margin: 0 0 30px; }
+.process-heading h2 em { font-weight: 400; }
 .process-heading p { max-width: 520px; margin: 0; color: #555; font-size: 17px; line-height: 1.7; }
+.process-heading--separated { padding-top: 110px; border-top: 1px solid var(--line); }
 .sketch-viewer { display: grid; grid-template-columns: minmax(210px, .28fr) minmax(0, 1fr); gap: 28px; padding: 0 5% 120px; }
 .sketch-thumbnails { display: flex; flex-direction: column; gap: 18px; }
+.sketch-viewer--dense .sketch-thumbnails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; }
 .sketch-thumb { padding: 0; border: 1px solid transparent; background: transparent; color: var(--ink); cursor: pointer; text-align: left; opacity: .56; transition: opacity .25s, border-color .25s; }
 .sketch-thumb:hover,
 .sketch-thumb.active { opacity: 1; border-color: var(--ink); }
-.sketch-thumb img { aspect-ratio: 1018 / 596; object-fit: contain; background: #fff; }
+.sketch-thumb img { display: block; width: 100%; height: 150px; object-fit: contain; background: #fff; }
 .sketch-thumb span { display: block; padding: 10px 12px; font-size: 10px; letter-spacing: .12em; }
 .sketch-stage { align-self: start; position: sticky; top: 24px; background: #fff; border: 1px solid var(--line); }
 .sketch-toolbar { display: flex; justify-content: space-between; gap: 20px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
 .sketch-toolbar a { border-bottom: 1px solid var(--ink); }
-.sketch-stage > img { width: 100%; height: auto; aspect-ratio: 1018 / 596; object-fit: contain; background: #fff; }
+.sketch-stage > img { display: block; width: 100%; height: min(76vh, 920px); object-fit: contain; background: #fff; }
 
 .pdf-project { display: grid; grid-template-columns: minmax(280px, .34fr) minmax(0, .66fr); gap: 56px; padding: 110px 5% 130px; border-top: 1px solid var(--line); }
 .pdf-project-intro { align-self: start; position: sticky; top: 32px; }
@@ -246,12 +249,15 @@ footer { padding: 30px 5%; align-items: center; }
   .lightbox-close { top: 18px; right: 18px; }
   .sketches-intro .collection-title-row h1 { font-size: clamp(76px, 27vw, 145px); }
   .process-heading { grid-template-columns: 1fr; gap: 22px; padding: 10px 20px 34px; }
+  .process-heading--separated { padding-top: 70px; }
   .process-heading h2 { font-size: 82px; margin-bottom: 22px; }
   .sketch-viewer { grid-template-columns: 1fr; gap: 18px; padding: 0 20px 80px; }
   .sketch-thumbnails { order: 2; display: flex; flex-direction: row; align-items: flex-start; gap: 14px; width: 100%; height: auto; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding: 2px 2px 12px; }
+  .sketch-viewer--dense .sketch-thumbnails { display: flex; }
   .sketch-thumb { flex: 0 0 190px; width: 190px; height: auto; min-height: 0; align-self: flex-start; scroll-snap-align: start; }
   .sketch-thumb img { display: block; width: 100%; height: 112px; aspect-ratio: auto; object-fit: contain; }
   .sketch-stage { position: static; }
+  .sketch-stage > img { height: auto; max-height: 78svh; }
   .pdf-project { grid-template-columns: 1fr; gap: 50px; padding: 80px 20px 90px; }
   .pdf-project-intro { position: static; }
   .pdf-project-intro h2 { font-size: clamp(58px, 17vw, 86px); }
